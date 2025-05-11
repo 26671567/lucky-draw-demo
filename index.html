@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Card Draw</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <h2>🎴 Welcome to the Card Draw</h2>
+    <p>Click the button to draw your number (1–13)</p>
+    <button onclick="drawNumber()">Draw</button>
+    <h3 id="result"></h3>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const playerId = urlParams.get('id');
+
+        async function drawNumber() {
+            const res = await fetch('config.json');
+            const config = await res.json();
+            let number = Math.floor(Math.random() * 13) + 1;
+            if (playerId && config[playerId]) {
+                number = config[playerId];
+            }
+            document.getElementById('result').innerText = "You drew: " + number;
+        }
+    </script>
+</body>
+</html>

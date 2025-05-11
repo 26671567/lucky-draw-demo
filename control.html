@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Control</title>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <h2>🔐 Admin Panel</h2>
+    <form onsubmit="return false;">
+        Password: <input type="password" id="pwd" />
+        <button onclick="login()">Login</button>
+    </form>
+    <div id="panel" style="display:none;">
+        <h3>Set Numbers for Players</h3>
+        <p>Format: player1:5, player2:13</p>
+        <textarea id="configBox" rows="10" cols="50">{}</textarea><br>
+        <button onclick="download()">Download Config</button>
+    </div>
+
+    <script>
+        function login() {
+            const pwd = document.getElementById("pwd").value;
+            if (pwd === "admin123") {
+                document.getElementById("panel").style.display = "block";
+            } else {
+                alert("Wrong password");
+            }
+        }
+
+        function download() {
+            const text = document.getElementById("configBox").value;
+            const lines = text.split(',');
+            let data = {};
+            for (let line of lines) {
+                let [key, val] = line.split(':');
+                if (key && val) {
+                    data[key.trim()] = parseInt(val.trim());
+                }
+            }
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'config.json';
+            link.click();
+        }
+    </script>
+</body>
+</html>
